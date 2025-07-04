@@ -2,6 +2,11 @@
 
 FreeTimeFinder is a full-stack web application for schedule coordination. It allows users to register, set their weekly availability, create groups/events, and automatically find common free time slots. All containerized in a single Docker image for easy deployment.
 
+## Demo
+
+![Demo](./ezgif-3bff1ca1876745.gif)
+
+
 ## Features
 - User registration and authentication
 - Weekly availability scheduling
