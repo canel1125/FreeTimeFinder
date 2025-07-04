@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  freetimefinder:
+    build: .
+    container_name: freetimefinder_all
+    ports:
+      - "8000:8000"
+      - "3000:3000"
+    environment:
+      - DEBUG=1
+      - DJANGO_SECRET_KEY=your-secret-key-change-in-production
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - REACT_APP_API_URL=http://localhost:8000/api
+    volumes:
+      - sqlite_data:/app/backend/db
+    networks:
+      - freetimefinder_network
+
+volumes:
+  sqlite_data:
+
+networks:
+  freetimefinder_network:
+    driver: bridge
