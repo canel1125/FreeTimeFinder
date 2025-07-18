@@ -74,7 +74,7 @@ def main():
     print("✅ MIGRATION COMPLETE!")
     print()
     print("📝 NEXT STEPS FOR USERS:")
-    print("   1. Visit the app at http://localhost:3000")
+    print("   1. Visit the app at http://localhost:3116")
     print("   2. Navigate to 'My Busy Times'")
     print("   3. Mark your busy/occupied time slots")
     print("   4. Check your groups to see common free times")
