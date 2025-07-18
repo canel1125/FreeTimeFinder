@@ -35,9 +35,9 @@ docker-compose up -d
 echo.
 echo ✅ FreeTimeFinder is now running!
 echo.
-echo 🌐 Frontend: http://localhost:3000
-echo 🔧 Backend API: http://localhost:8000/api
-echo ⚙️ Django Admin: http://localhost:8000/admin
+echo 🌐 Frontend: http://localhost:3116
+echo 🔧 Backend API: http://localhost:8116/api
+echo ⚙️ Django Admin: http://localhost:8116/admin
 echo.
 echo 📊 To view logs: docker-compose logs -f
 echo 🛑 To stop: docker-compose down

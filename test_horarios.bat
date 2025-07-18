@@ -22,7 +22,7 @@ echo =====================================================
 echo                INSTRUCCIONES DE PRUEBA
 echo =====================================================
 echo.
-echo 1. Abrir navegador en: http://localhost:3000
+echo 1. Abrir navegador en: http://localhost:3116
 echo 2. Registrarse/Iniciar sesion
 echo 3. Ir a "My Busy Times"
 echo.
