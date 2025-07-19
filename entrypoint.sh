@@ -1,13 +1,19 @@
 #!/bin/bash
 set -e
 
-# Run migrations (db_init equivalent)
-echo "Running Django migrations..."
+# Change to the backend directory where manage.py is located
+cd backend
+
+# Apply database migrations
+echo "Applying database migrations..."
 python manage.py migrate
 
-# Start Django backend in background
-python manage.py runserver 0.0.0.0:8116 &
+# Collect static files (React build output and Django's static files)
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
 
-# Start React frontend (serve static build)
-echo "Starting static frontend on port 3116..."
-cd static && npx serve -s . -l 3116
+# Start Gunicorn server
+# Gunicorn will serve the Django app and Whitenoise will handle static files.
+# We bind to 0.0.0.0 to allow external connections (from Docker's host).
+echo "Starting Gunicorn server..."
+gunicorn freetimefinder.wsgi:application --bind 0.0.0.0:8000

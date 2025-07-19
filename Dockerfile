@@ -1,37 +1,38 @@
-# This image will run migrations, Django backend, and React frontend in one container
-
+# Stage 1: Build React frontend
 FROM node:18 AS frontend-build
 WORKDIR /app/frontend
-COPY frontend/package.json frontend/package.json ./
-RUN npm install
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 
-FROM python:3.11-slim AS backend-build
-WORKDIR /app
-# Install system dependencies and nodejs for serve
-RUN apt-get update \
-    && apt-get install -y gcc libpq-dev curl \
-    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g serve \
-    && rm -rf /var/lib/apt/lists/*
-# Copy backend code
-COPY backend/ ./backend/
-COPY --from=frontend-build /app/frontend/build ./backend/static/
-WORKDIR /app/backend
-# Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Stage 2: Build the final Python image
+FROM python:3.11-slim
 
-# Copy entrypoint script
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set work directory
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --upgrade pip
+
+# Copy backend code and dependencies file
+COPY backend/requirements.txt ./
+RUN pip install -r requirements.txt
+COPY backend/ ./
+
+# Copy frontend build output from the build stage
+COPY --from=frontend-build /app/frontend/build ./static
+
+# Copy and set permissions for entrypoint
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Expose ports for Django and React
-EXPOSE 8116 3116
+# Expose the port Gunicorn will run on
+EXPOSE 8000
 
-# Use a volume for SQLite DB
-VOLUME ["/app/backend/db"]
-
-# Start everything via entrypoint
+# Run the entrypoint script
 ENTRYPOINT ["/entrypoint.sh"]
